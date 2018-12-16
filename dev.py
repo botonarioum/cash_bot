@@ -15,6 +15,7 @@ from dotenv import load_dotenv, find_dotenv
 from telegram.error import NetworkError, Unauthorized
 from telegram.ext import Dispatcher, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 
+from database import init_database
 from handlers import default
 from handlers import earn
 from handlers import bank
@@ -27,6 +28,7 @@ from handlers.filters.help_filter import HelpFilter
 from handlers.filters.partners_filter import PartnersFilter
 
 load_dotenv(find_dotenv())
+database = init_database()
 
 update_id = None
 
