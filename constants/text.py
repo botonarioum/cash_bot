@@ -12,6 +12,7 @@ class EarnButtonTitles(Enum):
     INVITE_FRIEND = "📢 Пригласить друга (10 у.е)"
     VIEW_NEWS = "👀 Посмотреть новости (3 у.е)"
     SUBSCRIBE_CHANNEL = "➕ Подписаться на канал (10 у.е)"
+    SHARE_CONTACTS = "🤝 Указать контакты  (25 у.е)"
 
 
 class BankButtonTitles(Enum):
