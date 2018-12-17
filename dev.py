@@ -15,12 +15,12 @@ from dotenv import load_dotenv, find_dotenv
 from telegram.error import NetworkError, Unauthorized
 from telegram.ext import Dispatcher, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 
-from database import init_database
+from init_database import init_database
 from handlers import default
 from handlers import earn
 from handlers import bank
-from handlers import start
 from handlers import help
+from handlers import start
 from handlers import partners
 from handlers.filters.earn_filter import EarnFilter
 from handlers.filters.bank_filter import BankFilter

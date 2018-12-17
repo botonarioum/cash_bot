@@ -22,3 +22,7 @@ class BankButtonTitles(Enum):
 class PartnerTitles(Enum):
     PARTNER_1 = 'Google'
     PARTNER_2 = 'Yandex'
+
+
+class EventNames(Enum):
+    START_USAGE = 'start_usage'
