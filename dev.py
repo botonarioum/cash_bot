@@ -22,10 +22,13 @@ from handlers import bank
 from handlers import help
 from handlers import start
 from handlers import partners
+from handlers import contact
+from handlers import share_contacts
 from handlers.filters.earn_filter import EarnFilter
 from handlers.filters.bank_filter import BankFilter
 from handlers.filters.help_filter import HelpFilter
 from handlers.filters.partners_filter import PartnersFilter
+from handlers.filters.back_filter import BackFilter
 
 load_dotenv(find_dotenv())
 database = init_database()
@@ -76,7 +79,11 @@ def echo(bot, dispatcher):
         dispatcher.add_handler(MessageHandler(HelpFilter(), help.help))
         dispatcher.add_handler(MessageHandler(PartnersFilter(), partners.partners))
         dispatcher.add_handler(CallbackQueryHandler(bank.withdraw, False, False, 'bank.action.withdraw'))
+        dispatcher.add_handler(CallbackQueryHandler(contact.share_info, False, False, 'earn.action.share_contacts'))
         dispatcher.add_handler(MessageHandler(Filters.text, default.select_menu_item))
+        dispatcher.add_handler(MessageHandler(BackFilter(), default.select_menu_item))
+        dispatcher.add_handler(MessageHandler(Filters.location, share_contacts.save_location))
+        dispatcher.add_handler(MessageHandler(Filters.contact, share_contacts.save_phone))
         dispatcher.process_update(update)
 
 
