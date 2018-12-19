@@ -81,6 +81,7 @@ def echo(bot, dispatcher):
         dispatcher.add_handler(CallbackQueryHandler(bank.withdraw, False, False, 'bank.action.withdraw'))
         dispatcher.add_handler(CallbackQueryHandler(contact.share_info, False, False, 'earn.action.share_contacts'))
         dispatcher.add_handler(CallbackQueryHandler(earn.invite_friend, False, False, 'earn.action.invite_friend'))
+        dispatcher.add_handler(CallbackQueryHandler(earn.see_news, False, False, 'earn.action.view_news'))
         dispatcher.add_handler(MessageHandler(Filters.text, default.select_menu_item))
         dispatcher.add_handler(MessageHandler(BackFilter(), default.select_menu_item))
         dispatcher.add_handler(MessageHandler(Filters.location, share_contacts.save_location))

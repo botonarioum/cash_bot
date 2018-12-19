@@ -27,6 +27,7 @@ class PartnerTitles(Enum):
 
 class EventNames(Enum):
     START_USAGE = 'start_usage'
+    READ_NEWS = 'read_news'
 
 
 class ShareContactsTitles(Enum):
@@ -41,6 +42,7 @@ class OtherTitles(Enum):
 class Prices(Enum):
     ON_USER_CONNECT = 0
     ON_REFERRAL_CONNECT = 50
+    ON_READ_NEWS = 3
 
 
 class Wallet(Enum):

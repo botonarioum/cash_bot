@@ -1,5 +1,4 @@
 from events.events import StartUsage
-from init_events import start_usage_event
 from menu import default_menu
 
 start_text = """
@@ -39,4 +38,5 @@ def info(bot, update):
 
 
 def call_events(bot, update):
+    from init_events import start_usage_event
     start_usage_event.send(StartUsage(bot, update))

@@ -110,3 +110,25 @@ def process_user_connect(sender):
     on_start_usage(sender)
     attach_partner(sender)
     add_referral_bonus(sender)
+
+
+def user_viewed_news(sender):
+    print('on read news')
+
+    update = sender.update
+
+    channel = Channel.get(Channel.channel_id == update.callback_query.message.chat.id, Channel.area == Area.get_by_id(2))
+    print(channel)
+
+    try:
+        event_title = Prices.ON_READ_NEWS.name
+        event_price = Prices.ON_READ_NEWS.value
+
+        event = Event()
+        event.title = event_title
+        event.price = event_price
+        event.channel = channel
+        event.save()
+
+    except DoesNotExist:
+        pass
