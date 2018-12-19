@@ -17,6 +17,7 @@ class EarnButtonTitles(Enum):
 
 class BankButtonTitles(Enum):
     WITHDRAW = "💶 Вывод средств"
+    PAYOUT = "👉 Страница вывода средств"
 
 
 class PartnerTitles(Enum):
@@ -40,3 +41,8 @@ class OtherTitles(Enum):
 class Prices(Enum):
     ON_USER_CONNECT = 0
     ON_REFERRAL_CONNECT = 50
+
+
+class Wallet(Enum):
+    MIN_WITHDRAW = 100
+    REFERRAL_PERCENTAGE = 10
