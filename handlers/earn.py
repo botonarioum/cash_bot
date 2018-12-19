@@ -31,20 +31,34 @@ def see_news(bot, update):
 
     position = 0
     balance = 0.00
+
+    message = None
+
     for item in news():
         position += 1
         balance += 0.30
 
-        message = """
+        text = """
 Выполнено: {} из {}
 Текущая статья: {}
 ---------------------
 Заработок с просмотра: ${}
         """.format(position, len(news()), item, round(balance, 2))
-        bot.editMessageText(message, channel_id, message_id)
+
+        if message:
+            channel_id = message.chat.id
+            message_id = message.message_id
+
+            bot.editMessageText(text, channel_id, message_id)
+        else:
+            channel_id = update.callback_query.message.chat.id
+            message_id = update.callback_query.message.message_id
+
+            message = bot.sendMessage(channel_id, text)
+
         sleep(3)
 
-    bot.editMessageText('Выполнено: {}  из {}'.format(len(news()), len(news())), channel_id, message_id)
+    bot.editMessageText('Выполнено: {} из {}'.format(len(news()), len(news())), channel_id, message_id)
     call_events(bot, update)
     bot.sendMessage(channel_id, 'Вам начисленно: $3.0')
 
