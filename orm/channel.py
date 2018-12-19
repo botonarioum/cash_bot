@@ -8,7 +8,7 @@ from orm.area import Area
 
 class Channel(Model):
     area = ForeignKeyField(Area)
-    partner = ForeignKeyField('self')
+    partner = ForeignKeyField('self', null=True)
 
     channel_id = IntegerField()
 

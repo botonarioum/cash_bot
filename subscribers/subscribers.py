@@ -77,7 +77,14 @@ def attach_partner(sender):
         partner = Channel.get(Channel.channel_id == referral_id, Channel.area == area)
         referral = Channel.get(Channel.channel_id == update.message.chat.id, Channel.area == area)
 
-        referral.set_partner(partner)
+        if referral.partner:
+            print('has partner')
+        else:
+            print('has no partner')
+
+            referral.set_partner(partner)
+            add_referral_bonus(sender)
+
     except IndexError:
         print('Registration without partnership')
 
@@ -109,7 +116,6 @@ def process_user_connect(sender):
     update_user(sender)
     on_start_usage(sender)
     attach_partner(sender)
-    add_referral_bonus(sender)
 
 
 def user_viewed_news(sender):
