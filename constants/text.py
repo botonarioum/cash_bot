@@ -39,3 +39,4 @@ class OtherTitles(Enum):
 
 class Prices(Enum):
     ON_USER_CONNECT = 0
+    ON_REFERRAL_CONNECT = 50

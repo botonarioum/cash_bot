@@ -1,5 +1,7 @@
 import datetime
 
+from peewee import DoesNotExist
+
 from constants.text import Prices
 from orm.area import Area
 from orm.channel import Channel
@@ -59,3 +61,52 @@ def on_start_usage(sender):
     }
 
     Event.get_or_create(channel_id=channel.id, defaults=defaults)
+
+
+def attach_partner(sender):
+    print('attach partner')
+    update = sender.update
+
+    split_by = ' '
+    partner_id_position = 1
+
+    try:
+        referral_id = update.message.text.split(split_by)[partner_id_position]
+        area = Area.get_by_id(2)
+
+        partner = Channel.get(Channel.channel_id == referral_id, Channel.area == area)
+        referral = Channel.get(Channel.channel_id == update.message.chat.id, Channel.area == area)
+
+        referral.set_partner(partner)
+    except IndexError:
+        print('Registration without partnership')
+
+
+def add_referral_bonus(sender):
+    print('add referral bonus')
+    update = sender.update
+
+    channel = Channel.get(Channel.channel_id == update.message.chat.id, Channel.area == Area.get_by_id(2))
+
+    try:
+        partner = channel.partner
+
+        event_title = Prices.ON_REFERRAL_CONNECT.name
+        event_price = Prices.ON_REFERRAL_CONNECT.value
+
+        event = Event()
+        event.title = event_title
+        event.price = event_price
+        event.channel = partner
+        event.save()
+
+    except DoesNotExist:
+        pass
+
+
+def process_user_connect(sender):
+    print('process user connection -------------------------')
+    update_user(sender)
+    on_start_usage(sender)
+    attach_partner(sender)
+    add_referral_bonus(sender)

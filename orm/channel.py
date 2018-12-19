@@ -8,6 +8,7 @@ from orm.area import Area
 
 class Channel(Model):
     area = ForeignKeyField(Area)
+    partner = ForeignKeyField('self')
 
     channel_id = IntegerField()
 
@@ -16,6 +17,10 @@ class Channel(Model):
 
     created_at = DateTimeField(default=datetime.datetime.now)
     updated_at = DateTimeField(default=datetime.datetime.now)
+
+    def set_partner(self, partner):
+        self.partner = partner
+        self.update_me()
 
     def update_me(self, now=None):
         self.updated_at = now or datetime.datetime.now()
