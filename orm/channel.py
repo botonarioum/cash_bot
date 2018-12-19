@@ -17,8 +17,8 @@ class Channel(Model):
     created_at = DateTimeField(default=datetime.datetime.now)
     updated_at = DateTimeField(default=datetime.datetime.now)
 
-    def update_me(self):
-        self.updated_at = datetime.datetime.now()
+    def update_me(self, now=None):
+        self.updated_at = now or datetime.datetime.now()
         self.save()
 
     class Meta:

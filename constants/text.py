@@ -35,3 +35,7 @@ class ShareContactsTitles(Enum):
 
 class OtherTitles(Enum):
     BACK = '↩️ Назад'
+
+
+class Prices(Enum):
+    ON_USER_CONNECT = 0
