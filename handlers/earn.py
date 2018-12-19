@@ -4,6 +4,7 @@ from time import sleep
 from events.events import ReadNews
 from init_events import read_news_event
 from menu import earn_menu
+from menu.helpers import get_chat_id, get_message_id
 
 
 def earn(bot, update):
@@ -47,7 +48,16 @@ def see_news(bot, update):
     call_events(bot, update)
     bot.sendMessage(channel_id, 'Вам начисленно: $3.0')
 
-    invite_friend(bot, update)
+    referral_link = os.getenv('REFERRAL_LINK_PATTERN')
+
+    message = """
+    Делитесь ссылкой с друзьями и зарабатывайте вместе:
+    {}""".format(referral_link.format(update.callback_query.message.chat.id))
+    chat_id = update.callback_query.message.chat.id
+
+    reply_markup = earn_menu.pickup_more(bot, update)
+
+    bot.sendMessage(chat_id, message, reply_markup=reply_markup)
 
 
 def news():
@@ -67,3 +77,12 @@ def news():
 
 def call_events(bot, update):
     read_news_event.send(ReadNews(bot, update))
+
+
+def pickup_more(bot, update):
+    reply_markup = earn_menu.menu(bot, update)
+
+    chat_id = get_chat_id(update)
+    message_id = get_message_id(update)
+
+    bot.editMessageReplyMarkup(chat_id, message_id, reply_markup=reply_markup)

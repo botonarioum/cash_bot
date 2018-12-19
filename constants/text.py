@@ -37,6 +37,7 @@ class ShareContactsTitles(Enum):
 
 class OtherTitles(Enum):
     BACK = '↩️ Назад'
+    MORE = 'Заработать ещё'
 
 
 class Prices(Enum):
