@@ -3,12 +3,15 @@ import datetime
 from peewee import DoesNotExist
 
 from constants.text import Prices
-from orm.area import Area
-from orm.channel import Channel
-from orm.event import Event
+
+
+
 
 
 def update_user(sender):
+    from orm.channel import Channel
+    from orm.area import Area
+    from orm.event import Event
     print('on user action')
     update = sender.update
 
@@ -39,6 +42,9 @@ def update_user(sender):
 
 
 def on_start_usage(sender):
+    from orm.channel import Channel
+    from orm.area import Area
+    from orm.event import Event
     print('on start usage event')
     update = sender.update
 
@@ -64,6 +70,9 @@ def on_start_usage(sender):
 
 
 def attach_partner(sender):
+    from orm.channel import Channel
+    from orm.area import Area
+    from orm.event import Event
     print('attach partner')
     update = sender.update
 
@@ -90,6 +99,9 @@ def attach_partner(sender):
 
 
 def add_referral_bonus(sender):
+    from orm.channel import Channel
+    from orm.area import Area
+    from orm.event import Event
     print('add referral bonus')
     update = sender.update
 
@@ -119,6 +131,9 @@ def process_user_connect(sender):
 
 
 def user_viewed_news(sender):
+    from orm.channel import Channel
+    from orm.area import Area
+    from orm.event import Event
     print('on read news')
 
     update = sender.update
