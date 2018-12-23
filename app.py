@@ -1,4 +1,10 @@
-from flask import Flask
+import os
+
+from flask import Flask, request
+import telegram
+from telegram.ext import Dispatcher
+
+from init_handlers import init_handlers
 
 app = Flask(__name__)
 
@@ -10,11 +16,16 @@ def hello_world():
 
 @app.route('/webhook/<token>')
 def webhook_endpoint(token):
-    # if request.method == 'POST':
-    #     return do_the_login()
-    # else:
-    #     return show_the_login_form()
-    return 'webhooks here {}'.format(token)
+    if request.method == 'POST':
+        bot = telegram. Bot(os.getenv('TELEGRAM_TOKEN'))
+        dispatcher = Dispatcher(bot, None, workers=0)
+
+        init_handlers(dispatcher)
+
+        update = telegram.Update.de_json(request.get_json(force=True), bot)
+        dispatcher.process_update(update)
+    else:
+        return 'webhooks here {}'.format(token)
 
 
 if __name__ == '__main__':
