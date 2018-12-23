@@ -23,6 +23,3 @@ def init_handlers(dispatcher):
     dispatcher.add_handler(MessageHandler(BackFilter(), default.select_menu_item))
     dispatcher.add_handler(MessageHandler(Filters.location, share_contacts.save_location))
     dispatcher.add_handler(MessageHandler(Filters.contact, share_contacts.save_phone))
-    # dispatcher.process_update(update)
-
-    # return dispatcher

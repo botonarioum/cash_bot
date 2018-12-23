@@ -1,7 +1,7 @@
 import os
 
-from flask import Flask, request
 import telegram
+from flask import Flask, request
 from telegram.ext import Dispatcher
 
 from init_handlers import init_handlers
@@ -17,7 +17,7 @@ def hello_world():
 @app.route('/webhook/<token>')
 def webhook_endpoint(token):
     if request.method == 'POST':
-        bot = telegram. Bot(os.getenv('TELEGRAM_TOKEN'))
+        bot = telegram.Bot(os.getenv('TELEGRAM_TOKEN'))
         dispatcher = Dispatcher(bot, None, workers=0)
 
         init_handlers(dispatcher)
