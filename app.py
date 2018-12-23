@@ -24,8 +24,7 @@ def webhook_endpoint(token):
 
         update = telegram.Update.de_json(request.get_json(force=True), bot)
         dispatcher.process_update(update)
-    else:
-        return 'webhooks here {}'.format(token)
+    return 'webhooks here {}'.format(token)
 
 
 if __name__ == '__main__':
