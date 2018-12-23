@@ -14,7 +14,7 @@ def hello_world():
     return 'Hello World!'
 
 
-@app.route('/webhook/<token>')
+@app.route('/webhook/<token>', methods=['GET', 'POST'])
 def webhook_endpoint(token):
     if request.method == 'POST':
         bot = telegram.Bot(os.getenv('TELEGRAM_TOKEN'))
