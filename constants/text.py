@@ -11,7 +11,7 @@ class DefaultButtonTitles(Enum):
 class EarnButtonTitles(Enum):
     INVITE_FRIEND = "📢 Пригласить друга (10 у.е)"
     VIEW_NEWS = "👀 Посмотреть новости (3 у.е)"
-    SUBSCRIBE_CHANNEL = "➕ Подписаться на канал (10 у.е)"
+    SUBSCRIBE_CHANNEL = "➕ Посетить сайт (0.5 у.е)"
     SHARE_CONTACTS = "🤝 Рассказать о себе (50 у.е)"
 
 
@@ -56,3 +56,7 @@ class Wallet(Enum):
 class TransitionTitles(Enum):
     VISIT = 'Открыть сайт'
     PAID = 'Получить награду'
+
+
+class SeeNewsTimeout(Enum):
+    TIMEOUT = 60 * 60

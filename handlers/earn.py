@@ -3,11 +3,18 @@ from time import sleep
 
 from peewee import DoesNotExist
 
+from constants.text import SeeNewsTimeout, Prices
 from events.events import ReadNews, VisitLink
 from init_events import read_news_event, visit_link_event
 from menu import earn_menu
 from menu.helpers import get_chat_id, get_message_id
+from orm.area import Area
+from orm.channel import Channel
+from orm.event import Event
 from orm.transition import Transition, STATUSES
+from time import time as now
+from datetime import datetime
+from datetime import datetime, timedelta
 
 
 def earn(bot, update):
@@ -28,10 +35,45 @@ def invite_friend(bot, update):
     bot.sendMessage(chat_id, message)
 
 
+def see_news_validate(bot, update):
+    timeout = SeeNewsTimeout.TIMEOUT.value
+
+    if update.callback_query:
+        channel_id = update.callback_query.message.chat.id
+    else:
+        channel_id = update.message.chat.id
+
+    area = Area.get_by_id(2)
+
+    x = datetime.now() - timedelta(seconds=timeout)
+
+
+    current_channel = Channel.get(Channel.area == area, Channel.channel_id == channel_id)
+    print(current_channel.get_id())
+
+    return Event.select().order_by(Event.created_at.desc()).where(Event.title == Prices.ON_READ_NEWS.name, Event.channel == current_channel, Event.created_at < (datetime.now() - timedelta(seconds=timeout))).get()
+    # has_prev = Event.select().where(Event.title == Prices.ON_READ_NEWS.name).count()
+
+    # print(has_prev.created_at)
+
+
 def see_news(bot, update):
     channel_id = update.callback_query.message.chat.id
     message_id = update.callback_query.message.message_id
 
+    prev_evet = see_news_validate(bot, update)
+
+    if prev_evet:
+        wait = datetime.now() - (prev_evet.created_at + timedelta(seconds=SeeNewsTimeout.TIMEOUT.value))
+        wait_in_munutes = int(wait.total_seconds() / 60)
+
+        message = 'Текущее задание будет доступно через {} мин.'.format(wait_in_munutes)
+
+        bot.sendMessage(channel_id, message)
+        return
+
+
+    # return
     position = 0
     balance = 0.00
 
