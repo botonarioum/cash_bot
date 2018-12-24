@@ -1,10 +1,13 @@
 import os
 from time import sleep
 
-from events.events import ReadNews
-from init_events import read_news_event
+from peewee import DoesNotExist
+
+from events.events import ReadNews, VisitLink
+from init_events import read_news_event, visit_link_event
 from menu import earn_menu
 from menu.helpers import get_chat_id, get_message_id
+from orm.transition import Transition, STATUSES
 
 
 def earn(bot, update):
@@ -100,3 +103,55 @@ def pickup_more(bot, update):
     message_id = get_message_id(update)
 
     bot.editMessageReplyMarkup(chat_id, message_id, reply_markup=reply_markup)
+
+
+def visit_url(bot, update):
+    from orm.transition import Transition, STATUSES
+    transition = Transition()
+    transition.status = STATUSES.NEW.value
+    transition.channel = 10
+    transition.save()
+
+    reply_markup = earn_menu.visit_url_menu(bot, update, transition)
+
+    chat_id = get_chat_id(update)
+
+    message = """
+Задание:
+1) Посетите сайт наших партнёров
+2) Возвращайтесь сюда и получите вознаграждение."""
+
+    bot.sendMessage(chat_id, message, reply_markup=reply_markup)
+
+
+def paid_for_visit(bot, update):
+    channel_id = update.callback_query.message.chat.id
+
+    try:
+        callback_data = update.callback_query.data
+        transition_id = callback_data.split('.').pop()
+
+        transition = Transition.get_by_id(transition_id)
+
+        if transition.status == STATUSES.VISIT.value:
+            visit_link_event.send(VisitLink(bot, update))
+            transition.mark_as(STATUSES.PAID.value)
+
+            bot.sendMessage(channel_id, 'Вам начисленно: $0.5')
+
+            referral_link = os.getenv('REFERRAL_LINK_PATTERN')
+
+            message = """
+                Делитесь ссылкой с друзьями и зарабатывайте вместе:
+                {}""".format(referral_link.format(update.callback_query.message.chat.id))
+            chat_id = update.callback_query.message.chat.id
+
+            reply_markup = earn_menu.pickup_more(bot, update)
+
+            bot.sendMessage(chat_id, message, reply_markup=reply_markup)
+        elif transition.status == STATUSES.NEW.value:
+            bot.sendMessage(channel_id, 'Для начала выполните задание - перейдите по ссылке!')
+        else:
+            bot.sendMessage(channel_id, 'Вы уже получили награду за выполнение этого задания!')
+    except DoesNotExist:
+        print('transition not found')

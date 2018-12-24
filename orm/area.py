@@ -1,6 +1,6 @@
 from peewee import Model, CharField
 
-from dev import database
+from init_database import database
 
 
 class Area(Model):

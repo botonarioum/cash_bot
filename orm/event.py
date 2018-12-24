@@ -1,6 +1,6 @@
 from peewee import Model, IntegerField, CharField, ForeignKeyField
 
-from dev import database
+from init_database import database
 from orm.channel import Channel
 
 

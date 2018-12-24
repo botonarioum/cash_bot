@@ -2,7 +2,7 @@ import datetime
 
 from peewee import Model, IntegerField, CharField, DateTimeField, ForeignKeyField
 
-from dev import database
+from init_database import database
 from orm.area import Area
 
 

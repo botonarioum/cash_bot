@@ -28,6 +28,7 @@ class PartnerTitles(Enum):
 class EventNames(Enum):
     START_USAGE = 'start_usage'
     READ_NEWS = 'read_news'
+    VISIT_LINK = 'visit_link'
 
 
 class ShareContactsTitles(Enum):
@@ -44,8 +45,14 @@ class Prices(Enum):
     ON_USER_CONNECT = 0
     ON_REFERRAL_CONNECT = 50
     ON_READ_NEWS = 3
+    ON_VIEW_LINK = 0.5
 
 
 class Wallet(Enum):
     MIN_WITHDRAW = 100
     REFERRAL_PERCENTAGE = 10
+
+
+class TransitionTitles(Enum):
+    VISIT = 'Открыть сайт'
+    PAID = 'Получить награду'

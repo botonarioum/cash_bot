@@ -5,13 +5,9 @@ from peewee import DoesNotExist
 from constants.text import Prices
 
 
-
-
-
 def update_user(sender):
     from orm.channel import Channel
     from orm.area import Area
-    from orm.event import Event
     print('on user action')
     update = sender.update
 
@@ -72,7 +68,6 @@ def on_start_usage(sender):
 def attach_partner(sender):
     from orm.channel import Channel
     from orm.area import Area
-    from orm.event import Event
     print('attach partner')
     update = sender.update
 
@@ -138,12 +133,40 @@ def user_viewed_news(sender):
 
     update = sender.update
 
-    channel = Channel.get(Channel.channel_id == update.callback_query.message.chat.id, Channel.area == Area.get_by_id(2))
+    channel = Channel.get(Channel.channel_id == update.callback_query.message.chat.id,
+                          Channel.area == Area.get_by_id(2))
     print(channel)
 
     try:
         event_title = Prices.ON_READ_NEWS.name
         event_price = Prices.ON_READ_NEWS.value
+
+        event = Event()
+        event.title = event_title
+        event.price = event_price
+        event.channel = channel
+        event.save()
+
+    except DoesNotExist:
+        pass
+
+
+def user_visit_link(sender):
+    print('on visit link')
+
+    from orm.channel import Channel
+    from orm.area import Area
+    from orm.event import Event
+
+    update = sender.update
+
+    channel = Channel.get(Channel.channel_id == update.callback_query.message.chat.id,
+                          Channel.area == Area.get_by_id(2))
+    print(channel)
+
+    try:
+        event_title = Prices.ON_VIEW_LINK.name
+        event_price = Prices.ON_VIEW_LINK.value
 
         event = Event()
         event.title = event_title

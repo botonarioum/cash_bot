@@ -19,7 +19,7 @@ from init_database import init_database
 from init_handlers import init_handlers
 
 load_dotenv(find_dotenv())
-database = init_database()
+init_database()
 
 update_id = None
 

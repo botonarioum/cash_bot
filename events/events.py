@@ -21,3 +21,14 @@ class ReadNews:
     def __init__(self, bot, update):
         self.bot = bot
         self.update = update
+
+
+class VisitLink:
+    EVENT_NAME = EventNames.VISIT_LINK.value
+
+    bot = None
+    update = None
+
+    def __init__(self, bot, update):
+        self.bot = bot
+        self.update = update
