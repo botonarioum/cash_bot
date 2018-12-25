@@ -103,14 +103,17 @@ def see_news_available(bot, update):
 def see_news_unavailable(bot, update, prev_event):
     channel_id = update.callback_query.message.chat.id
 
-    wait = (prev_event.created_at + timedelta(seconds=SeeNewsTimeout.TIMEOUT.value)) - datetime.now()
-    wait_in_munutes = int(wait.total_seconds() / 60)
+    # wait = (prev_event.created_at + timedelta(seconds=SeeNewsTimeout.TIMEOUT.value)) - datetime.now()
+    # wait_in_minutes = int(wait.total_seconds() / 60)
 
-    bot.sendMessage(channel_id, 'Текущее задание будет доступно через {} мин.'.format(wait_in_munutes))
+    # bot.sendMessage(channel_id, 'Текущее задание будет доступно через {} мин.'.format(wait_in_minutes))
+    bot.sendMessage(channel_id, 'Текущее задани ещё не готово')
     return True
 
 
 def see_news(bot, update):
+    print('SEE NEWS')
+
     # channel_id = update.callback_query.message.chat.id
     # message_id = update.callback_query.message.message_id
 
