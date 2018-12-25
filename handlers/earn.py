@@ -1,4 +1,5 @@
 import os
+import threading
 from datetime import datetime, timedelta
 from time import sleep
 
@@ -49,7 +50,7 @@ def last_see_news_event(bot, update):
         return None
 
 
-def see_news_available(bot, update):
+def run_sees(bot, update):
     channel_id = update.callback_query.message.chat.id
     message_id = update.callback_query.message.message_id
 
@@ -63,11 +64,11 @@ def see_news_available(bot, update):
         balance += 0.30
 
         text = """
-    Выполнено: {} из {}
-    Текущая статья: {}
-    ---------------------
-    Заработок с просмотра: ${}
-            """.format(position, len(news()), item, round(balance, 2))
+        Выполнено: {} из {}
+        Текущая статья: {}
+        ---------------------
+        Заработок с просмотра: ${}
+                """.format(position, len(news()), item, round(balance, 2))
 
         if message:
             channel_id = message.chat.id
@@ -89,13 +90,21 @@ def see_news_available(bot, update):
     referral_link = os.getenv('REFERRAL_LINK_PATTERN')
 
     message = """
-        Делитесь ссылкой с друзьями и зарабатывайте вместе:
-        {}""".format(referral_link.format(update.callback_query.message.chat.id))
+            Делитесь ссылкой с друзьями и зарабатывайте вместе:
+            {}""".format(referral_link.format(update.callback_query.message.chat.id))
     chat_id = update.callback_query.message.chat.id
 
     reply_markup = earn_menu.pickup_more(bot, update)
 
     bot.sendMessage(chat_id, message, reply_markup=reply_markup)
+
+
+def see_news_available(bot, update):
+
+    thread = threading.Thread(target=run_sees, args=(bot, update))
+        # thread.daemon = True                            # Daemonize thread
+    thread.start()                                  # Start the execution
+    # run_sees(bot, update)
 
     return True
 
@@ -132,6 +141,7 @@ def see_news(bot, update):
         # bot.sendMessage(channel_id, 'Текущее задание будет доступно через {} мин.'.format(wait_in_munutes))
         # return False
     return see_news_available(bot, update)
+
 
 #     position = 0
 #     balance = 0.00
@@ -182,16 +192,16 @@ def see_news(bot, update):
 
 def news():
     return [
-        # 'РБК',
-        # 'Коммерсантъ',
-        # 'Эхо Москвы',
-        # 'Газета.Ru',
-        # 'PressaRU',
-        # 'Российская газета',
-        # 'Аргументы и Факты',
-        # 'Lenta RU',
-        # 'Московский комсомолец',
-        # 'Мир новостей',
+        'РБК',
+        'Коммерсантъ',
+        'Эхо Москвы',
+        'Газета.Ru',
+        'PressaRU',
+        'Российская газета',
+        'Аргументы и Факты',
+        'Lenta RU',
+        'Московский комсомолец',
+        'Мир новостей',
     ]
 
 
