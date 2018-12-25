@@ -66,13 +66,9 @@ def see_news(bot, update):
         print(datetime.now())
         wait_in_munutes = int(wait.total_seconds() / 60)
 
-        message = 'Текущее задание будет доступно через {} мин.'.format(wait_in_munutes)
-
-        bot.sendMessage(channel_id, message)
+        bot.sendMessage(channel_id, 'Текущее задание будет доступно через {} мин.'.format(wait_in_munutes))
         return False
 
-
-    # return
     position = 0
     balance = 0.00
 
