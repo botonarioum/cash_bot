@@ -69,7 +69,7 @@ def see_news(bot, update):
         message = 'Текущее задание будет доступно через {} мин.'.format(wait_in_munutes)
 
         bot.sendMessage(channel_id, message)
-        return
+        return False
 
 
     # return
@@ -116,6 +116,8 @@ def see_news(bot, update):
     reply_markup = earn_menu.pickup_more(bot, update)
 
     bot.sendMessage(chat_id, message, reply_markup=reply_markup)
+
+    return True
 
 
 def news():
