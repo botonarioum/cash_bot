@@ -85,7 +85,7 @@ def run_sees(bot, update):
 
     bot.editMessageText('Выполнено: {} из {}'.format(len(news()), len(news())), channel_id, message_id)
     call_events(bot, update)
-    bot.sendMessage(channel_id, 'Вам начисленно: $3.0')
+    bot.sendMessage(channel_id, 'Вам начисленно: $5.0')
 
     referral_link = os.getenv('REFERRAL_LINK_PATTERN')
 
@@ -250,7 +250,7 @@ def paid_for_visit(bot, update):
             visit_link_event.send(VisitLink(bot, update))
             transition.mark_as(STATUSES.PAID.value)
 
-            bot.sendMessage(channel_id, 'Вам начисленно: $0.5')
+            bot.sendMessage(channel_id, 'Вам начисленно: $2.0')
 
             referral_link = os.getenv('REFERRAL_LINK_PATTERN')
 
