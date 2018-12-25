@@ -9,10 +9,10 @@ class DefaultButtonTitles(Enum):
 
 
 class EarnButtonTitles(Enum):
-    INVITE_FRIEND = "📢 Пригласить друга (10 у.е)"
-    VIEW_NEWS = "👀 Посмотреть новости (3 у.е)"
-    SUBSCRIBE_CHANNEL = "➕ Посетить сайт (0.5 у.е)"
-    SHARE_CONTACTS = "🤝 Рассказать о себе (50 у.е)"
+    INVITE_FRIEND = "📢 Пригласить друга ($10.0)"
+    VIEW_NEWS = "👀 Посмотреть новости ($5.0)"
+    SUBSCRIBE_CHANNEL = "➕ Посетить сайт ($2.0)"
+    SHARE_CONTACTS = "🤝 Рассказать о себе ($50.0)"
 
 
 class BankButtonTitles(Enum):
@@ -44,13 +44,13 @@ class OtherTitles(Enum):
 
 class Prices(Enum):
     ON_USER_CONNECT = 0.0
-    ON_REFERRAL_CONNECT = 50.0
-    ON_READ_NEWS = 3.0
-    ON_VIEW_LINK = 0.5
+    ON_REFERRAL_CONNECT = 10.0
+    ON_READ_NEWS = 5.0
+    ON_VIEW_LINK = 2.0
 
 
 class Wallet(Enum):
-    MIN_WITHDRAW = 100
+    MIN_WITHDRAW = 300
     REFERRAL_PERCENTAGE = 10
 
 
