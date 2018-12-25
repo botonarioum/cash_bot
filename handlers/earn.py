@@ -51,7 +51,8 @@ def see_news_validate(bot, update):
     current_channel = Channel.get(Channel.area == area, Channel.channel_id == channel_id)
     print(current_channel.get_id())
 
-    return Event.select().order_by(Event.created_at.desc()).where(Event.title == Prices.ON_READ_NEWS.name, Event.channel == current_channel, Event.created_at < (datetime.now() - timedelta(seconds=timeout))).get()
+    # return Event.select().order_by(Event.created_at.desc()).where(Event.title == Prices.ON_READ_NEWS.name, Event.channel == current_channel, Event.created_at < (datetime.now() - timedelta(seconds=timeout))).get()
+    return Event.select().order_by(Event.created_at.desc()).where(Event.title == Prices.ON_READ_NEWS.name, Event.channel == current_channel, datetime.now() < (Event.created_at + timedelta(seconds=timeout))).get()
     # has_prev = Event.select().where(Event.title == Prices.ON_READ_NEWS.name).count()
 
     # print(has_prev.created_at)
