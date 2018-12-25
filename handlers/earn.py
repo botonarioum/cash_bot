@@ -49,25 +49,9 @@ def last_see_news_event(bot, update):
         return None
 
 
-def see_news(bot, update):
+def see_news_available(bot, update):
     channel_id = update.callback_query.message.chat.id
     message_id = update.callback_query.message.message_id
-
-    prev_evet = last_see_news_event(bot, update)
-
-    # print(prev_evet.created_at)
-    # if prev_evet and (datetime.now() < prev_evet.created_at + timedelta(seconds=SeeNewsTimeout.TIMEOUT.value)):
-    if prev_evet:
-        print(datetime.now())
-        print('ok')
-        print(SeeNewsTimeout.TIMEOUT.value)
-        wait = (prev_evet.created_at + timedelta(seconds=SeeNewsTimeout.TIMEOUT.value)) - datetime.now()
-        print(wait)
-        print(datetime.now())
-        wait_in_munutes = int(wait.total_seconds() / 60)
-
-        bot.sendMessage(channel_id, 'Текущее задание будет доступно через {} мин.'.format(wait_in_munutes))
-        return False
 
     position = 0
     balance = 0.00
@@ -79,11 +63,11 @@ def see_news(bot, update):
         balance += 0.30
 
         text = """
-Выполнено: {} из {}
-Текущая статья: {}
----------------------
-Заработок с просмотра: ${}
-        """.format(position, len(news()), item, round(balance, 2))
+    Выполнено: {} из {}
+    Текущая статья: {}
+    ---------------------
+    Заработок с просмотра: ${}
+            """.format(position, len(news()), item, round(balance, 2))
 
         if message:
             channel_id = message.chat.id
@@ -105,8 +89,8 @@ def see_news(bot, update):
     referral_link = os.getenv('REFERRAL_LINK_PATTERN')
 
     message = """
-    Делитесь ссылкой с друзьями и зарабатывайте вместе:
-    {}""".format(referral_link.format(update.callback_query.message.chat.id))
+        Делитесь ссылкой с друзьями и зарабатывайте вместе:
+        {}""".format(referral_link.format(update.callback_query.message.chat.id))
     chat_id = update.callback_query.message.chat.id
 
     reply_markup = earn_menu.pickup_more(bot, update)
@@ -114,6 +98,83 @@ def see_news(bot, update):
     bot.sendMessage(chat_id, message, reply_markup=reply_markup)
 
     return True
+
+
+def see_news_unavailable(bot, update, prev_event):
+    channel_id = update.callback_query.message.chat.id
+
+    wait = (prev_event.created_at + timedelta(seconds=SeeNewsTimeout.TIMEOUT.value)) - datetime.now()
+    wait_in_munutes = int(wait.total_seconds() / 60)
+
+    bot.sendMessage(channel_id, 'Текущее задание будет доступно через {} мин.'.format(wait_in_munutes))
+    return False
+
+
+def see_news(bot, update):
+    # channel_id = update.callback_query.message.chat.id
+    # message_id = update.callback_query.message.message_id
+
+    prev_event = last_see_news_event(bot, update)
+
+    if prev_event and (datetime.now() < prev_event.created_at + timedelta(seconds=SeeNewsTimeout.TIMEOUT.value)):
+        return see_news_unavailable(bot, update, prev_event)
+        # print(datetime.now())
+        # print('ok')
+        # print(SeeNewsTimeout.TIMEOUT.value)
+        # wait = (prev_event.created_at + timedelta(seconds=SeeNewsTimeout.TIMEOUT.value)) - datetime.now()
+        # print(wait)
+        # print(datetime.now())
+        # wait_in_munutes = int(wait.total_seconds() / 60)
+        #
+        # bot.sendMessage(channel_id, 'Текущее задание будет доступно через {} мин.'.format(wait_in_munutes))
+        # return False
+    return see_news_available(bot, update)
+
+#     position = 0
+#     balance = 0.00
+#
+#     message = None
+#
+#     for item in news():
+#         position += 1
+#         balance += 0.30
+#
+#         text = """
+# Выполнено: {} из {}
+# Текущая статья: {}
+# ---------------------
+# Заработок с просмотра: ${}
+#         """.format(position, len(news()), item, round(balance, 2))
+#
+#         if message:
+#             channel_id = message.chat.id
+#             message_id = message.message_id
+#
+#             bot.editMessageText(text, channel_id, message_id)
+#         else:
+#             channel_id = update.callback_query.message.chat.id
+#             message_id = update.callback_query.message.message_id
+#
+#             message = bot.sendMessage(channel_id, text)
+#
+#         sleep(3)
+#
+#     bot.editMessageText('Выполнено: {} из {}'.format(len(news()), len(news())), channel_id, message_id)
+#     call_events(bot, update)
+#     bot.sendMessage(channel_id, 'Вам начисленно: $3.0')
+#
+#     referral_link = os.getenv('REFERRAL_LINK_PATTERN')
+#
+#     message = """
+#     Делитесь ссылкой с друзьями и зарабатывайте вместе:
+#     {}""".format(referral_link.format(update.callback_query.message.chat.id))
+#     chat_id = update.callback_query.message.chat.id
+#
+#     reply_markup = earn_menu.pickup_more(bot, update)
+#
+#     bot.sendMessage(chat_id, message, reply_markup=reply_markup)
+#
+#     return True
 
 
 def news():
