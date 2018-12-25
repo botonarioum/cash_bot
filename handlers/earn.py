@@ -107,7 +107,7 @@ def see_news_unavailable(bot, update, prev_event):
     wait_in_munutes = int(wait.total_seconds() / 60)
 
     bot.sendMessage(channel_id, 'Текущее задание будет доступно через {} мин.'.format(wait_in_munutes))
-    return False
+    return True
 
 
 def see_news(bot, update):
