@@ -29,6 +29,7 @@ class EventNames(Enum):
     START_USAGE = 'start_usage'
     READ_NEWS = 'read_news'
     VISIT_LINK = 'visit_link'
+    ANY_ACTION = 'any_action'
 
 
 class ShareContactsTitles(Enum):
@@ -42,9 +43,9 @@ class OtherTitles(Enum):
 
 
 class Prices(Enum):
-    ON_USER_CONNECT = 0
-    ON_REFERRAL_CONNECT = 50
-    ON_READ_NEWS = 3
+    ON_USER_CONNECT = 0.0
+    ON_REFERRAL_CONNECT = 50.0
+    ON_READ_NEWS = 3.0
     ON_VIEW_LINK = 0.5
 
 

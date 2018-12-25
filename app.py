@@ -5,7 +5,9 @@ import telegram
 from flask import Flask, request, redirect
 from telegram.ext import Dispatcher
 
+from events.events import AnyAction
 from init_database import init_database
+from init_events import user_make_action
 
 init_database()
 
@@ -29,6 +31,9 @@ def webhook_endpoint(token):
         init_handlers(dispatcher)
 
         update = telegram.Update.de_json(request.get_json(force=True), bot)
+
+        # todo: update user
+        user_make_action.send(AnyAction(bot, update))
         dispatcher.process_update(update)
     return 'webhooks here {}'.format(token)
 

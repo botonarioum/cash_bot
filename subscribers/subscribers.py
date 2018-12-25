@@ -81,6 +81,10 @@ def attach_partner(sender):
         partner = Channel.get(Channel.channel_id == referral_id, Channel.area == area)
         referral = Channel.get(Channel.channel_id == update.message.chat.id, Channel.area == area)
 
+        if partner == referral:
+            print('partner equal referral')
+            raise IndexError('Partner can`t be equal referral')
+
         if referral.partner:
             print('has partner')
         else:

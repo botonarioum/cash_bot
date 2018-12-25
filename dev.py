@@ -15,7 +15,9 @@ from dotenv import load_dotenv, find_dotenv
 from telegram.error import NetworkError, Unauthorized
 from telegram.ext import Dispatcher
 
+from events.events import AnyAction
 from init_database import init_database
+from init_events import user_make_action
 from init_handlers import init_handlers
 
 load_dotenv(find_dotenv())
@@ -61,6 +63,9 @@ def echo(bot, dispatcher):
         update_id = update.update_id + 1
 
         init_handlers(dispatcher)
+
+        # todo: update user
+        user_make_action.send(AnyAction(bot, update))
         dispatcher.process_update(update)
 
 

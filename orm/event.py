@@ -1,4 +1,4 @@
-from peewee import Model, IntegerField, CharField, ForeignKeyField, TimestampField, DateTimeField
+from peewee import Model, CharField, ForeignKeyField, DateTimeField, DecimalField
 
 from init_database import database
 from orm.channel import Channel
@@ -6,7 +6,7 @@ from orm.channel import Channel
 
 class Event(Model):
     title = CharField(null=True)
-    price = IntegerField()
+    price = DecimalField()
     channel = ForeignKeyField(Channel)
     created_at = DateTimeField()
 
