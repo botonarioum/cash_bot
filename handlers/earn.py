@@ -35,7 +35,7 @@ def invite_friend(bot, update):
     bot.sendMessage(chat_id, message)
 
 
-def see_news_validate(bot, update):
+def last_see_news_event(bot, update):
     timeout = SeeNewsTimeout.TIMEOUT.value
 
     if update.callback_query:
@@ -45,14 +45,14 @@ def see_news_validate(bot, update):
 
     area = Area.get_by_id(2)
 
-    x = datetime.now() - timedelta(seconds=timeout)
-
+    # x = datetime.now() < (Event.created_at + timedelta(seconds=timeout))
+    # x = Event.created_at < datetime.now() - timedelta(seconds=timeout)
 
     current_channel = Channel.get(Channel.area == area, Channel.channel_id == channel_id)
-    print(current_channel.get_id())
+    # print(datetime.now() - timedelta(seconds=timeout))
 
     # return Event.select().order_by(Event.created_at.desc()).where(Event.title == Prices.ON_READ_NEWS.name, Event.channel == current_channel, Event.created_at < (datetime.now() - timedelta(seconds=timeout))).get()
-    return Event.select().order_by(Event.created_at.desc()).where(Event.title == Prices.ON_READ_NEWS.name, Event.channel == current_channel, datetime.now() < (Event.created_at + timedelta(seconds=timeout))).get()
+    return Event.select().order_by(Event.created_at.desc()).where(Event.title == Prices.ON_READ_NEWS.name, Event.channel == current_channel).get()
     # has_prev = Event.select().where(Event.title == Prices.ON_READ_NEWS.name).count()
 
     # print(has_prev.created_at)
@@ -62,9 +62,13 @@ def see_news(bot, update):
     channel_id = update.callback_query.message.chat.id
     message_id = update.callback_query.message.message_id
 
-    prev_evet = see_news_validate(bot, update)
+    prev_evet = last_see_news_event(bot, update)
 
-    if prev_evet:
+    print(prev_evet.created_at)
+    if prev_evet and (datetime.now() < prev_evet.created_at + timedelta(seconds=SeeNewsTimeout.TIMEOUT.value)):
+        print(datetime.now())
+        print('ok')
+        print(SeeNewsTimeout.TIMEOUT.value)
         wait = datetime.now() - (prev_evet.created_at + timedelta(seconds=SeeNewsTimeout.TIMEOUT.value))
         wait_in_munutes = int(wait.total_seconds() / 60)
 
