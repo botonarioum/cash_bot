@@ -1,4 +1,5 @@
 import os
+from datetime import datetime, timedelta
 from time import sleep
 
 from peewee import DoesNotExist
@@ -12,9 +13,6 @@ from orm.area import Area
 from orm.channel import Channel
 from orm.event import Event
 from orm.transition import Transition, STATUSES
-from time import time as now
-from datetime import datetime
-from datetime import datetime, timedelta
 
 
 def earn(bot, update):
@@ -36,26 +34,19 @@ def invite_friend(bot, update):
 
 
 def last_see_news_event(bot, update):
-    timeout = SeeNewsTimeout.TIMEOUT.value
+    try:
+        if update.callback_query:
+            channel_id = update.callback_query.message.chat.id
+        else:
+            channel_id = update.message.chat.id
 
-    if update.callback_query:
-        channel_id = update.callback_query.message.chat.id
-    else:
-        channel_id = update.message.chat.id
+        area = Area.get_by_id(2)
 
-    area = Area.get_by_id(2)
-
-    # x = datetime.now() < (Event.created_at + timedelta(seconds=timeout))
-    # x = Event.created_at < datetime.now() - timedelta(seconds=timeout)
-
-    current_channel = Channel.get(Channel.area == area, Channel.channel_id == channel_id)
-    # print(datetime.now() - timedelta(seconds=timeout))
-
-    # return Event.select().order_by(Event.created_at.desc()).where(Event.title == Prices.ON_READ_NEWS.name, Event.channel == current_channel, Event.created_at < (datetime.now() - timedelta(seconds=timeout))).get()
-    return Event.select().order_by(Event.created_at.desc()).where(Event.title == Prices.ON_READ_NEWS.name, Event.channel == current_channel).get()
-    # has_prev = Event.select().where(Event.title == Prices.ON_READ_NEWS.name).count()
-
-    # print(has_prev.created_at)
+        current_channel = Channel.get(Channel.area == area, Channel.channel_id == channel_id)
+        return Event.select().order_by(Event.created_at.desc()).where(Event.title == Prices.ON_READ_NEWS.name,
+                                                                      Event.channel == current_channel).get()
+    except DoesNotExist:
+        return None
 
 
 def see_news(bot, update):
@@ -64,12 +55,15 @@ def see_news(bot, update):
 
     prev_evet = last_see_news_event(bot, update)
 
-    print(prev_evet.created_at)
-    if prev_evet and (datetime.now() < prev_evet.created_at + timedelta(seconds=SeeNewsTimeout.TIMEOUT.value)):
+    # print(prev_evet.created_at)
+    # if prev_evet and (datetime.now() < prev_evet.created_at + timedelta(seconds=SeeNewsTimeout.TIMEOUT.value)):
+    if prev_evet:
         print(datetime.now())
         print('ok')
         print(SeeNewsTimeout.TIMEOUT.value)
-        wait = datetime.now() - (prev_evet.created_at + timedelta(seconds=SeeNewsTimeout.TIMEOUT.value))
+        wait = (prev_evet.created_at + timedelta(seconds=SeeNewsTimeout.TIMEOUT.value)) - datetime.now()
+        print(wait)
+        print(datetime.now())
         wait_in_munutes = int(wait.total_seconds() / 60)
 
         message = 'Текущее задание будет доступно через {} мин.'.format(wait_in_munutes)
